@@ -171,8 +171,8 @@ static void resetConf(void)
     memset(&cfg, 0, sizeof(config_t));
 
     mcfg.version = EEPROM_CONF_VERSION;
-    mcfg.mixerConfiguration = MULTITYPE_HEX6; // 헥사콥터
-    //mcfg.mixerConfiguration = MULTITYPE_QUADX;  // 쿼드콥터
+    //mcfg.mixerConfiguration = MULTITYPE_HEX6; // 헥사콥터
+    mcfg.mixerConfiguration = MULTITYPE_QUADX;  // 쿼드콥터
     featureClearAll();    
     
     featureSet(FEATURE_SERIALRX);       // 시리얼포트로 HexAirBot 인터페이스 수신을 위해 
@@ -219,7 +219,7 @@ static void resetConf(void)
     mcfg.deadband3d_high = 1514;
     mcfg.neutral3d = 1460;
     mcfg.deadband3d_throttle = 50;
-    mcfg.motor_pwm_rate = 1000;     // Hz DC 브러시모터는 500 초과값을 설정
+    mcfg.motor_pwm_rate = 400;     // Hz DC 브러시모터는 500 초과값을 설정
     mcfg.servo_pwm_rate = 50;
     
     // gps/nav stuff
