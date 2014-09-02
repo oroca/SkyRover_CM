@@ -9,7 +9,10 @@
 
 //-- Thread 관련 함수
 //
-osThreadId Thread_Loop_Handle, Thread_Serial_Handle;
+osThreadId Thread_Loop_Handle;
+osThreadId Thread_Serial_Handle;
+osThreadId Thread_Lcd_Handle;
+
 
 
 static void Thread_Loop(void const *argument)
@@ -51,6 +54,34 @@ static void Thread_Serial(void const *argument)
     }
 }
 
+
+static void Thread_Lcd(void const *argument)
+{
+    uint32_t count = 0;
+    (void) argument;
+
+    DEBUG_PRINT("Thread Lcd\r\n");
+
+    N5110_Init();
+
+    N5110_Print( 0, 0, "  <SkyRover> " );
+
+    for (;;)
+    {
+    	if( f.ARMED == 1 )  N5110_Print( 0, 2, "           arm" );
+    	else 				N5110_Print( 0, 2, "        disarm" );
+
+
+    	N5110_Print( 0, 3, "R : %d   ", angle[0]/10 );
+    	N5110_Print( 0, 4, "P : %d   ", angle[1]/10 );
+    	N5110_Print( 0, 5, "Y : %d   ", heading );
+
+
+    	//angle[0], angle[1], heading
+
+        osDelay(50);
+    }
+}
 
 
 
@@ -252,11 +283,13 @@ int main(void)
     //
     osThreadDef(TASK1, Thread_Loop  , osPriorityNormal, 0, configMINIMAL_STACK_SIZE);
     osThreadDef(TASK2, Thread_Serial, osPriorityNormal, 0, configMINIMAL_STACK_SIZE);
+    osThreadDef(TASK3, Thread_Lcd   , osPriorityNormal, 0, configMINIMAL_STACK_SIZE);
 
     //-- Start thread
     //
     Thread_Loop_Handle   = osThreadCreate(osThread(TASK1), NULL);
     Thread_Serial_Handle = osThreadCreate(osThread(TASK2), NULL);
+    Thread_Lcd_Handle    = osThreadCreate(osThread(TASK3), NULL);
 
     //-- Start scheduler
     //
