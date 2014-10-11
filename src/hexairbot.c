@@ -10,6 +10,7 @@ static uint16_t hexairbotReadRawRC(uint8_t chan);
 
 static uint32_t hexairbotChannelData[HEXAIRBOT_MAX_CHANNEL];
 
+uint32_t hexairbotReadyCnt = 0;
 
 void hexairbotInit(rcReadRawDataPtr *callback)
 {
@@ -30,6 +31,7 @@ void hexairbotSetData(uint16_t index, uint16_t c)
 }
 
 
+
 bool hexairbotFrameComplete(void)
 {
     uint8_t b;
@@ -37,6 +39,9 @@ bool hexairbotFrameComplete(void)
     if (hexairbotFrameDone) 
     {
         hexairbotFrameDone = false;
+
+        hexairbotReadyCnt++;
+
         return true;
     }
     return false;

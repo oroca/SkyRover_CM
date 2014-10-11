@@ -29,10 +29,16 @@ static void Thread_Loop(void const *argument)
 }
 
 
+extern uint32_t hexairbotReadyCnt;
+
 static void Thread_Serial(void const *argument)
 {
     uint32_t count = 0;
     (void) argument;
+
+    uint32_t PreCntReady = 0;
+    uint32_t CntReady;
+
 
     DEBUG_PRINT("Thread Serial\r\n");
 
@@ -45,12 +51,28 @@ static void Thread_Serial(void const *argument)
             //Hw_VCom_Putch('b');
             //Hw_VCom_Putch(' ');
 
-			Hw_VCom_Printf( "Angle : %d\t %d\t %d\t"  , angle[0], angle[1], heading );
+			Hw_VCom_Printf( "Angle : %d\t %d\t %d\t %d "  , angle[0], angle[1], heading, CntReady );
 			Hw_VCom_Printf( "rc :\t %d\t %d\t %d\t %d\t \r\n", rcCommand[0], rcCommand[1], rcCommand[2], rcCommand[3] );
 
 
         }
         osDelay(100);
+
+
+        if( f.ARMED && CntReady < 5 )
+        {
+            mwDisarm();
+        }
+
+
+
+        if( (count % 10) == 0 )
+        {
+            CntReady = hexairbotReadyCnt - PreCntReady;
+            PreCntReady = hexairbotReadyCnt;
+        }
+
+        count++;
     }
 }
 

@@ -3,6 +3,8 @@
 
 // June 2013     V2.2-dev
 
+
+
 flags_t f;
 int16_t debug[4];
 uint8_t toggleBeep = 0;
@@ -64,6 +66,8 @@ uint16_t AccInflightCalibrationActive = 0;
 // Battery monitoring stuff
 uint8_t batteryCellCount = 3;       // cell count
 uint16_t batteryWarningVoltage;     // annoying buzzer after this one, battery ready to be dead
+
+
 
 void blinkLED(uint8_t num, uint8_t wait, uint8_t repeat)
 {
